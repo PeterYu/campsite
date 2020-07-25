@@ -1,0 +1,18 @@
+{
+  "name": "boyscout",
+  "version": "1.0.0",
+  "description": "Script to help improve test coverage",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "keywords": [
+    "jest",
+    "testing"
+  ],
+  "author": "Peter Yu",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^26.1.0"
+  }
+}
