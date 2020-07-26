@@ -1,5 +1,4 @@
 import {processGitOutput} from "../../src/lib/git";
-import {describe, expect, test} from "@jest/globals";
 
 describe('git module', () => {
     test('no modified files', () => {
