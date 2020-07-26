@@ -4,7 +4,7 @@
   "description": "Script to help improve test coverage",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest"
   },
   "keywords": [
     "jest",
@@ -12,7 +12,14 @@
   ],
   "author": "Peter Yu",
   "license": "ISC",
-  "dependencies": {
-    "jest": "^26.1.0"
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jest": "^26.0.7",
+    "babel-jest": "^26.1.0",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.3"
   }
 }

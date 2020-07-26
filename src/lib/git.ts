@@ -8,7 +8,7 @@ export function processGitOutput(stdout: string) {
     const lines = stdout.split("\n");
 
     let modified = lines
-        .filter(line => line.search(/(modified:|new file:)/) >= 0)
+        .filter(line => line.search(/(modified:|new file:|deleted:)/) >= 0)
         .map(line => line.split(':')[1].trim());
 
     return dedupeArray(modified);
