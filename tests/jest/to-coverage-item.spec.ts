@@ -1,7 +1,7 @@
 import {Line} from '../../src/lib/parse-lines';
 import {toCoverageItem} from '../../src/lib/to-coverage-item';
 
-describe.skip('to coverage item', () => {
+describe('to coverage item', () => {
     test('empty line', () => {
         expect(toCoverageItem(new Line(''))).toBeFalsy();
     });

@@ -10,17 +10,19 @@ npm run build:js
 
 # Usage
 
-1. Take a baseline
+## Measuring test coverage difference against a baseline measurement
+
+Step 1. Take a baseline
     ```
     node dist/index.js --baseline
     ```
 
-2. Measure against baseline
+Step 2. Measure against baseline in Step 1. It will generate the following coverage statistics against baseline.
     ```
     node dist/index.js
     ```
 
-    It will generate the following coverage statistics against baseline.
+    Output:
     ```
     > node dist/index.js
 

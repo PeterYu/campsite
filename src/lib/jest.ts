@@ -16,10 +16,10 @@ export function jestCoverage(bsArgs: Args) {
         // console.log('coverage output:', coverageTable);
         // console.log('argments:', bsArgs);
         if (bsArgs.baseline) {
-            fs.writeFileSync('bs-baseline.json', JSON.stringify(coverageTable, null, '\t'));
+            fs.writeFileSync('campsite.baseline', JSON.stringify(coverageTable, null, '\t'));
         } else {
-            if (fs.existsSync('bs-baseline.json')) {
-                const baselineBuffer = fs.readFileSync('bs-baseline.json', {encoding: 'utf8'});
+            if (fs.existsSync('campsite.baseline')) {
+                const baselineBuffer = fs.readFileSync('campsite.baseline', {encoding: 'utf8'});
                 // console.log('about to diff baseline', baselineBuffer);
                 compareBaseline(JSON.parse(baselineBuffer), coverageTable);
             }
@@ -68,11 +68,14 @@ function colorizeDiff(diff: number) {
 function uncoveredLines(newStat: CoverageItem, baselineStat: CoverageItem) {
     if (newStat.linePercent - baselineStat.linePercent < 0) {
         return `   ${red('... Uncovered lines: ')}${bold(red(newStat.uncoveredLineNumbers))}`;
+    } else {
+        return '';
     }
 }
 
 export function compareBaseline(baseline: CoverageTable, newStats: CoverageTable) {
     const allFileLinePercentDiff = newStats.allFiles.linePercent - baseline.allFiles.linePercent;
+    console.log('Comparing line coverage % against baseline');
     console.log('All files: ', colorizeDiff(allFileLinePercentDiff));
 
     newStats.items.forEach(newStat => {
