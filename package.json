@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
+    "start:baseline": "node dist/index.js --baseline",
     "test": "jest --coverage",
     "build:js": "npx babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline"
   },
@@ -14,7 +15,9 @@
   ],
   "author": "Peter Yu",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "colors": "^1.4.0"
+  },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.10.5",

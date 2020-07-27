@@ -1,10 +1,16 @@
 import {getModifiedFiles} from './lib/git';
-import {jestCoverage} from './lib/jest';
+import {Args, jestCoverage} from './lib/jest';
 
-export default function main() {
-    getModifiedFiles().then(files => {
-        files.map(file => console.log(`file: ${file}`));
-    });
+export default function main(args: string[]) {
+    // getModifiedFiles().then(files => {
+    //     files.map(file => console.log(`file: ${file}`));
+    // });
 
-    jestCoverage();
+    const bsArgs:Args = {};
+
+    if (args.find(arg => arg.search(/--baseline/) >= 0)) {
+        bsArgs.baseline = true;
+    }
+
+    jestCoverage(bsArgs);
 }

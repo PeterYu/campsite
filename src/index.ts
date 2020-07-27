@@ -1,3 +1,6 @@
 import main from './main';
+import * as process from 'process';
 
-main();
+const args = process.argv.slice(2);
+
+main(args);
