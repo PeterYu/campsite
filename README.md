@@ -1,5 +1,5 @@
-# boyscout
-Javascript module that analyzes the source files that has been changed and its test coverage
+# Campsite
+Campsite is a developer productivity tool that offers metrics and insight of code and test quality.
 
 # Installation
 
