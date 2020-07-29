@@ -12,7 +12,9 @@ export interface Args {
 
 export function jestCoverage(bsArgs: Args) {
     exec('jest --coverage', (error, stdout, stderr) => {
-        // console.log(`jest output: ${stdout}`);
+
+        console.log(stdout);
+
         const coverageTable = parseCoverageOutput(stdout);
         // console.log('coverage output:', coverageTable);
         // console.log('argments:', bsArgs);
