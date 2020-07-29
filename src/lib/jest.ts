@@ -4,6 +4,7 @@ import {parseCoverageLine} from './coverage-line-parser';
 import {toCoverageItem} from './to-coverage-item';
 import * as fs from 'fs';
 import {bold, green, red} from 'colors/safe';
+import {diffBaseline} from './diff-baseline';
 
 export interface Args {
     baseline?: boolean;
@@ -65,9 +66,9 @@ function colorizeDiff(diff: number) {
     }
 }
 
-function uncoveredLines(newStat: CoverageItem, baselineStat: CoverageItem) {
-    if (newStat.linePercent - baselineStat.linePercent < 0) {
-        return `   ${red('... Uncovered lines: ')}${bold(red(newStat.uncoveredLineNumbers))}`;
+function uncoveredLines(diff: CoverageItem) {
+    if (diff.linePercent < 0) {
+        return `   ${red('... Uncovered lines: ')}${bold(red(diff.uncoveredLineNumbers))}`;
     } else {
         return '';
     }
@@ -77,16 +78,10 @@ export function compareBaseline(baseline: CoverageTable, newStats: CoverageTable
     const allFileLinePercentDiff = newStats.allFiles.linePercent - baseline.allFiles.linePercent;
     console.log('Comparing line coverage % against baseline');
     console.log('All files: ', colorizeDiff(allFileLinePercentDiff));
-
-    newStats.items.forEach(newStat => {
-        const baselineStat = baseline.items.find(item => item.file === newStat.file);
-        if (baselineStat) {
-            const diff = newStat.linePercent - baselineStat.linePercent;
-            if (diff !== 0) {
-                console.log(` ${baselineStat.file}: ${colorizeDiff(diff)} ${uncoveredLines(newStat, baselineStat)}`);
-            }
-        }
-    })
-
-
+    const diff = diffBaseline(baseline, newStats);
+    diff.items
+        .filter(i => i.linePercent !== 0)
+        .forEach(diff => {
+            console.log(` ${diff.file}: ${colorizeDiff(diff.linePercent)} ${uncoveredLines(diff)}`);
+        });
 }
