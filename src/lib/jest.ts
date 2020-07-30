@@ -77,10 +77,9 @@ function uncoveredLines(diff: CoverageItem) {
 }
 
 export function compareBaseline(baseline: CoverageTable, newStats: CoverageTable) {
-    const allFileLinePercentDiff = newStats.allFiles.linePercent - baseline.allFiles.linePercent;
-    console.log('Comparing line coverage % against baseline');
-    console.log('All files: ', colorizeDiff(allFileLinePercentDiff));
     const diff = diffBaseline(baseline, newStats);
+    console.log('Comparing line coverage % against baseline');
+    console.log('All files: ', colorizeDiff(diff.allFiles.linePercent));
     diff.items
         .filter(i => i.linePercent !== 0)
         .forEach(diff => {
