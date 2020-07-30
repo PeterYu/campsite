@@ -1,6 +1,6 @@
 {
   "name": "@nexxspace/campsite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Script to help improve test coverage",
   "main": "./dist/main.js",
   "bin": {
