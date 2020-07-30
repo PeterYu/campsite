@@ -11,9 +11,10 @@ export interface Args {
 }
 
 export function jestCoverage(bsArgs: Args) {
-    exec('jest --coverage', (error, stdout, stderr) => {
+    exec('npx jest --coverage', (error, stdout, stderr) => {
 
         console.log(stdout);
+        console.error(stderr);
 
         const coverageTable = parseCoverageOutput(stdout);
         // console.log('coverage output:', coverageTable);
