@@ -11,6 +11,7 @@
     "start:baseline": "node dist/index.js --baseline",
     "test": "jest --coverage",
     "build": "npx babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline"
+    "prepublish": "npx babel src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline"
   },
   "keywords": [
     "jest",
