@@ -1,4 +1,4 @@
-import {parseCoverageOutput} from '../../src/lib/jest';
+import {parseCoverageOutput} from '../../src/lib/parse-coverage';
 
 describe('jest module', () => {
     test('no item', () => {

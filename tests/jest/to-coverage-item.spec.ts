@@ -1,38 +1,41 @@
 import {Line} from '../../src/lib/parse-lines';
-import {toCoverageItem} from '../../src/lib/to-coverage-item';
+import {convertCoverageLinesToCoverageItems} from '../../src/lib/to-coverage-item';
+import {CoverageItem, CoverageLine} from '../../src/lib/jest';
 
 describe('to coverage item', () => {
     test('empty line', () => {
-        expect(toCoverageItem(new Line(''))).toBeFalsy();
+        expect(convertCoverageLinesToCoverageItems([new CoverageLine('')]))
+            .toEqual([]);
     });
 
     test('not a line', () => {
-        expect(toCoverageItem(new Line('ABC'))).toBeFalsy();
+        expect(convertCoverageLinesToCoverageItems([new CoverageLine('ABC')]))
+            .toEqual([]);
     });
 
     test('all file line', () => {
-        let coverageItem = toCoverageItem(
-            new Line('All files       |   78.26 |        0 |   76.92 |   76.19 |')
+        let coverageItems: CoverageItem[]= convertCoverageLinesToCoverageItems(
+            [new Line('All files       |   78.26 |        0 |   76.92 |   76.19 |')]
         );
 
-        expect(coverageItem.file).toEqual('All files');
-        expect(coverageItem.statementPercent).toEqual(78.26);
-        expect(coverageItem.branchPercent).toEqual(0);
-        expect(coverageItem.functionPercent).toEqual(76.92);
-        expect(coverageItem.linePercent).toEqual(76.19);
-        expect(coverageItem.uncoveredLineNumbers).toEqual('');
+        expect(coverageItems[0].file).toEqual('All files');
+        expect(coverageItems[0].statementPercent).toEqual(78.26);
+        expect(coverageItems[0].branchPercent).toEqual(0);
+        expect(coverageItems[0].functionPercent).toEqual(76.92);
+        expect(coverageItems[0].linePercent).toEqual(76.19);
+        expect(coverageItems[0].uncoveredLineNumbers).toEqual('');
     });
 
     test('file line', () => {
-        let coverageItem = toCoverageItem(
-            new Line('git.ts         |   66.67 |        0 |    62.5 |   64.29 | 18-23')
+        let coverageItems = convertCoverageLinesToCoverageItems(
+            [new Line('git.ts         |   66.67 |        0 |    62.5 |   64.29 | 18-23')]
         );
 
-        expect(coverageItem.file).toEqual('git.ts');
-        expect(coverageItem.statementPercent).toEqual(66.67);
-        expect(coverageItem.branchPercent).toEqual(0);
-        expect(coverageItem.functionPercent).toEqual(62.5);
-        expect(coverageItem.linePercent).toEqual(64.29);
-        expect(coverageItem.uncoveredLineNumbers).toEqual('18-23');
+        expect(coverageItems[0].file).toEqual('git.ts');
+        expect(coverageItems[0].statementPercent).toEqual(66.67);
+        expect(coverageItems[0].branchPercent).toEqual(0);
+        expect(coverageItems[0].functionPercent).toEqual(62.5);
+        expect(coverageItems[0].linePercent).toEqual(64.29);
+        expect(coverageItems[0].uncoveredLineNumbers).toEqual('18-23');
     });
 });

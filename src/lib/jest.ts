@@ -1,10 +1,9 @@
 import {exec} from 'child_process';
-import {parseLines} from './parse-lines';
-import {parseCoverageLine} from './coverage-line-parser';
-import {toCoverageItem} from './to-coverage-item';
+import {Line} from './parse-lines';
 import * as fs from 'fs';
 import {bold, green, red} from 'colors/safe';
-import {diffBaseline} from './diff-baseline';
+import {compareBaseline} from './compare-baseline';
+import {parseCoverageOutput} from './parse-coverage';
 
 export interface Args {
     baseline?: boolean;
@@ -24,11 +23,23 @@ export function jestCoverage(bsArgs: Args) {
         } else {
             if (fs.existsSync('campsite.baseline')) {
                 const baselineBuffer = fs.readFileSync('campsite.baseline', {encoding: 'utf8'});
-                // console.log('about to diff baseline', baselineBuffer);
-                compareBaseline(JSON.parse(baselineBuffer), coverageTable);
+
+                const diffTable = compareBaseline(JSON.parse(baselineBuffer), coverageTable);
+
+                console.log('Comparing line coverage % against baseline');
+                console.log('All files: ', colorizeDiff(diffTable.allFiles.linePercent));
+                diffTable.items.forEach(diff => {
+                    console.log(` ${diff.file}: ${colorizeDiff(diff.linePercent)} ${uncoveredLines(diff)}`);
+                });
             }
         }
     });
+}
+
+export class CoverageLine extends Line {
+    constructor(public line: string) {
+        super(line);
+    }
 }
 
 export interface CoverageItem {
@@ -42,20 +53,7 @@ export interface CoverageItem {
 
 export interface CoverageTable {
     allFiles: CoverageItem;
-    items?: CoverageItem[]
-}
-
-export function parseCoverageOutput(rawOutput: string): CoverageTable {
-    const lines = parseLines(rawOutput);
-
-    let coverageLines = parseCoverageLine(lines);
-
-    let coverageItems = coverageLines.map(toCoverageItem);
-
-    return {
-        allFiles: coverageItems[0],
-        items: coverageItems.splice(1)
-    };
+    items: CoverageItem[]
 }
 
 function colorizeDiff(diff: number) {
@@ -75,15 +73,4 @@ function uncoveredLines(diff: CoverageItem) {
     } else {
         return '';
     }
-}
-
-export function compareBaseline(baseline: CoverageTable, newStats: CoverageTable) {
-    const diff = diffBaseline(baseline, newStats);
-    console.log('Comparing line coverage % against baseline');
-    console.log('All files: ', colorizeDiff(diff.allFiles.linePercent));
-    diff.items
-        .filter(i => i.linePercent !== 0)
-        .forEach(diff => {
-            console.log(` ${diff.file}: ${colorizeDiff(diff.linePercent)} ${uncoveredLines(diff)}`);
-        });
 }

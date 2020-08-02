@@ -2,10 +2,11 @@
   "name": "@nexxspace/campsite",
   "version": "1.0.3",
   "description": "Script to help improve test coverage",
-  "main": "./dist/main.js",
+  "main": "index",
   "bin": {
-    "campsite": "./dist/index.js"
+    "campsite": "dist/index.js"
   },
+  "files": ["dist/**/*"],
   "scripts": {
     "start": "node dist/index.js",
     "start:baseline": "node dist/index.js --baseline",

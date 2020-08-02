@@ -1,12 +1,17 @@
-import {Line} from './parse-lines';
-import {CoverageItem} from './jest';
+import {CoverageItem, CoverageLine} from './jest';
 
-export function toCoverageItem(line: Line): CoverageItem | undefined {
+export function convertCoverageLinesToCoverageItems(coverageLines: CoverageLine[]) {
+    return coverageLines
+        .filter(isValidCoverageLine)
+        .map(toCoverageItem);
+}
+
+function isValidCoverageLine(cl: CoverageLine) {
+    return cl.line.split('|').length === 6;
+}
+
+function toCoverageItem(line: CoverageLine): CoverageItem {
     let columns = line.line.split('|');
-
-    if (columns.length != 6) {
-        return undefined;
-    }
 
     return {
         file: columns[0].trim(),
