@@ -7,7 +7,7 @@ export function convertCoverageLinesToCoverageItems(coverageLines: CoverageLine[
 }
 
 function isValidCoverageLine(cl: CoverageLine) {
-    return cl.line.split('|').length === 6;
+    return cl.line.split('|').length >= 6;
 }
 
 function toCoverageItem(line: CoverageLine): CoverageItem {

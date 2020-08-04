@@ -56,4 +56,19 @@ Ran all test suites.
 
         expect(coverageReport.allFiles).toBeTruthy();
     });
+
+    test('extra columns are okay', () => {
+        const jestCoverageOutput = `
+----------|---------|----------|---------|---------|-------------------|
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s |
+----------|---------|----------|---------|---------|-------------------|
+All files |   66.67 |        0 |    62.5 |   64.29 |                   |
+ git.ts   |   66.67 |        0 |    62.5 |   64.29 | 18-23             |
+----------|---------|----------|---------|---------|-------------------|
+        `;
+
+        const coverageReport = parseCoverageOutput(jestCoverageOutput);
+
+        expect(coverageReport.allFiles).toBeTruthy();
+    });
 })

@@ -15,7 +15,7 @@ export function parseCoverageLine(lines: Line[]): CoverageLine[] {
 
     lines.forEach((l) => {
         isTableBorder = l.line.search(/^-+\|/) >= 0;
-        isTableHeader = l.line.search(/File\s+\| % Stmts\s+\|/) >= 0;
+        isTableHeader = l.line.search(/File\s+\|\s+% Stmts\s+\|/) >= 0;
 
         if (!isTableBorder && !hasTableHeader) {
             hasTableHeader = isTableHeader;
