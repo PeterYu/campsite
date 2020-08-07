@@ -1,5 +1,5 @@
-import {Line} from '../../src/lib/parse-lines';
-import {parseCoverageLine} from '../../src/lib/coverage-line-parser';
+import {Line} from '../../src/lib/jest/parse-lines';
+import {parseCoverageLine} from '../../src/lib/jest/coverage-line-parser';
 
 describe('coverage line parser', () => {
     test('no lines', () => {

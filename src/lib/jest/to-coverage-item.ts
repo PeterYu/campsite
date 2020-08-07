@@ -19,6 +19,7 @@ function toCoverageItem(line: CoverageLine): CoverageItem {
         branchPercent: Number.parseFloat(columns[2].trim()),
         functionPercent: Number.parseFloat(columns[3].trim()),
         linePercent: Number.parseFloat(columns[4].trim()),
-        uncoveredLineNumbers: columns[5].trim()
+        uncoveredLineNumbers: columns[5].trim(),
+        path: line.path
     };
 }

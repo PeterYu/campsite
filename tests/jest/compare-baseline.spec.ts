@@ -1,4 +1,4 @@
-import {diffBaseline, Percentages} from '../../src/lib/diff-baseline';
+import {diffBaseline, Percentages} from '../../src/lib/jest/diff-baseline';
 
 describe('Compare Against Baseline', () => {
     const percentages1: Percentages = {
@@ -27,13 +27,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages3,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages3,
-                    uncoveredLineNumbers: '23-43'
+                    uncoveredLineNumbers: '23-43',
+                    path: 'git.ts'
                 }
             ]
 
@@ -49,13 +51,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages1,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages1,
-                    uncoveredLineNumbers: '12-3'
+                    uncoveredLineNumbers: '12-3',
+                    path: 'git.ts'
                 }
             ]
 
@@ -64,13 +68,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages2,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages3,
-                    uncoveredLineNumbers: '23-43'
+                    uncoveredLineNumbers: '23-43',
+                    path: 'git.ts'
                 }
             ]
         };
@@ -81,13 +87,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: newStats.allFiles.file,
                 ...percentages1,
-                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers
+                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers,
+                path: ''
             },
             items: [
                 {
                     file: newStats.items[0].file,
                     ...percentages2,
-                    uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers
+                    uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers,
+                    path: newStats.items[0].path
                 }
             ]
         });
@@ -98,18 +106,21 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages1,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages1,
-                    uncoveredLineNumbers: '12-3'
+                    uncoveredLineNumbers: '12-3',
+                    path: 'git.ts'
                 },
                 {
                     file: 'jest.ts',
                     ...percentages2,
-                    uncoveredLineNumbers: '12-3'
+                    uncoveredLineNumbers: '12-3',
+                    path: 'jest.ts'
                 }
             ]
         };
@@ -118,13 +129,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages2,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages3,
-                    uncoveredLineNumbers: '23-43'
+                    uncoveredLineNumbers: '23-43',
+                    path: 'git.ts'
                 }
             ]
         };
@@ -135,13 +148,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: newStats.allFiles.file,
                 ...percentages1,
-                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers
+                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers,
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages2,
-                    uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers
+                    uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers,
+                    path: 'git.ts'
                 }
             ]
         });
@@ -153,13 +168,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages1,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages1,
-                    uncoveredLineNumbers: '12-3'
+                    uncoveredLineNumbers: '12-3',
+                    path: 'git.ts'
                 }
             ]
         };
@@ -168,18 +185,21 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: 'All files',
                 ...percentages2,
-                uncoveredLineNumbers: ''
+                uncoveredLineNumbers: '',
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages3,
-                    uncoveredLineNumbers: '23-43'
+                    uncoveredLineNumbers: '23-43',
+                    path: 'git.ts'
                 },
                 {
                     file: 'jest.ts',
                     ...percentages2,
-                    uncoveredLineNumbers: '12-3'
+                    uncoveredLineNumbers: '12-3',
+                    path: 'jest.ts'
                 }
             ]
         };
@@ -190,13 +210,15 @@ describe('Compare Against Baseline', () => {
             allFiles: {
                 file: newStats.allFiles.file,
                 ...percentages1,
-                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers
+                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers,
+                path: ''
             },
             items: [
                 {
                     file: 'git.ts',
                     ...percentages2,
-                    uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers
+                    uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers,
+                    path: 'git.ts'
                 }
             ]
         });

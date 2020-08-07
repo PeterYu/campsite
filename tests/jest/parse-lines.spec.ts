@@ -1,4 +1,4 @@
-import {Line, parseLines} from '../../src/lib/parse-lines';
+import {Line, parseLines} from '../../src/lib/jest/parse-lines';
 
 describe('Line Parser', () => {
 
@@ -24,9 +24,9 @@ describe('Line Parser', () => {
         expect(lines).toEqual([new Line('hello world')]);
     });
 
-    test('trim white spaces', () => {
+    test('trim white spaces at end only', () => {
         const lines = parseLines("\thello world   ");
-        expect(lines).toEqual([new Line('hello world')]);
+        expect(lines).toEqual([new Line('\thello world')]);
     });
 
     test('multiple lines', () => {

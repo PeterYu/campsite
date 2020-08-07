@@ -37,7 +37,7 @@ export function jestCoverage(bsArgs: Args) {
 }
 
 export class CoverageLine extends Line {
-    constructor(public line: string) {
+    constructor(public line: string, public path: string) {
         super(line);
     }
 }
@@ -49,6 +49,7 @@ export interface CoverageItem {
     functionPercent: number;
     linePercent: number;
     uncoveredLineNumbers: string;
+    path: string;
 }
 
 export interface CoverageTable {

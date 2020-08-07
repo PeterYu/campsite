@@ -1,7 +1,6 @@
 import {Line} from './parse-lines';
-import {CoverageLine} from './jest';
 
-export function parseCoverageLine(lines: Line[]): CoverageLine[] {
+export function parseCoverageLine(lines: Line[]): Line[] {
     const coverages: Line[] = [];
 
     let isTableBorder = false;

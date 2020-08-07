@@ -1,5 +1,4 @@
-import {getModifiedFiles} from './lib/git';
-import {Args, jestCoverage} from './lib/jest';
+import {Args, jestCoverage} from './lib/jest/jest';
 
 export default function main(args: string[]) {
     // getModifiedFiles().then(files => {

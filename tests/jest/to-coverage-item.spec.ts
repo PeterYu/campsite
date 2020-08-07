@@ -1,21 +1,20 @@
-import {Line} from '../../src/lib/parse-lines';
-import {convertCoverageLinesToCoverageItems} from '../../src/lib/to-coverage-item';
-import {CoverageItem, CoverageLine} from '../../src/lib/jest';
+import {convertCoverageLinesToCoverageItems} from '../../src/lib/jest/to-coverage-item';
+import {CoverageItem, CoverageLine} from '../../src/lib/jest/jest';
 
 describe('to coverage item', () => {
     test('empty line', () => {
-        expect(convertCoverageLinesToCoverageItems([new CoverageLine('')]))
+        expect(convertCoverageLinesToCoverageItems([new CoverageLine('', '')]))
             .toEqual([]);
     });
 
     test('not a line', () => {
-        expect(convertCoverageLinesToCoverageItems([new CoverageLine('ABC')]))
+        expect(convertCoverageLinesToCoverageItems([new CoverageLine('ABC', '')]))
             .toEqual([]);
     });
 
     test('all file line', () => {
         let coverageItems: CoverageItem[]= convertCoverageLinesToCoverageItems(
-            [new Line('All files       |   78.26 |        0 |   76.92 |   76.19 |')]
+            [new CoverageLine('All files       |   78.26 |        0 |   76.92 |   76.19 |', '')]
         );
 
         expect(coverageItems[0].file).toEqual('All files');
@@ -28,7 +27,7 @@ describe('to coverage item', () => {
 
     test('file line', () => {
         let coverageItems = convertCoverageLinesToCoverageItems(
-            [new Line('git.ts         |   66.67 |        0 |    62.5 |   64.29 | 18-23')]
+            [new CoverageLine('git.ts         |   66.67 |        0 |    62.5 |   64.29 | 18-23', '')]
         );
 
         expect(coverageItems[0].file).toEqual('git.ts');
