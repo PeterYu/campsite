@@ -14,7 +14,7 @@ function toCoverageItem(line: CoverageLine): CoverageItem {
     let columns = line.line.split('|');
 
     return {
-        file: columns[0].trim(),
+        file: columns[0].trimRight(),
         statementPercent: Number.parseFloat(columns[1].trim()),
         branchPercent: Number.parseFloat(columns[2].trim()),
         functionPercent: Number.parseFloat(columns[3].trim()),
