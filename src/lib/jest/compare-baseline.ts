@@ -7,6 +7,7 @@ export function compareBaseline(baseline: CoverageTable, newStats: CoverageTable
     const containsLinePercentage = items.filter(i => i.linePercent !== 0);
     const diffItems = containsLinePercentage ? containsLinePercentage : []
     return {
+        columnWidths: newStats.columnWidths,
         allFiles: {...diff.allFiles},
         items: [...diffItems]
     };
