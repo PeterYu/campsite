@@ -1,4 +1,4 @@
-import {exec} from 'child_process';
+import {spawn} from 'child_process';
 import {Line} from './parse-lines';
 import * as fs from 'fs';
 import {bold, green, red} from 'colors/safe';
@@ -36,12 +36,17 @@ function printDataLine(
 }
 
 export function jestCoverage(bsArgs: Args) {
-    exec('npx jest --coverage', (error, stdout, stderr) => {
+    const jestProc = spawn('npx', ['jest', '--coverage']);
 
-        console.log(stdout);
-        console.error(stderr);
+    const stdout: string[] = [];
 
-        const coverageTable = parseCoverageOutput(stdout);
+    jestProc.on('error', error => console.error(error));
+    jestProc.stdout.on('data', data => {
+        console.log(`${data}`);
+        stdout.push(`${data}`);
+    });
+    jestProc.on('exit', () => {
+        const coverageTable = parseCoverageOutput(stdout.join());
         if (bsArgs.baseline) {
             fs.writeFileSync('campsite.baseline', JSON.stringify(coverageTable, null, '\t'));
         } else {
@@ -86,7 +91,7 @@ export function jestCoverage(bsArgs: Args) {
                 printBorder(coverageTable.columnWidths);
             }
         }
-    });
+    })
 }
 
 export class CoverageLine extends Line {
