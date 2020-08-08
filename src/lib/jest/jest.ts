@@ -9,6 +9,32 @@ export interface Args {
     baseline?: boolean;
 }
 
+function printBorder(columnWidths: number[]) {
+    console.log(columnWidths.map(w => '-'.repeat(w)).join('|').concat('|'));
+}
+
+function printLine(columnContents: string[], columnWidths: number[]) {
+    console.log(columnContents.map((c, i) => ` ${c}`.padEnd(columnWidths[i], ' ')).join('|').concat('|'));
+}
+
+function printDataLine(
+    file: string,
+    columnContents: number[],
+    uncoveredLines: string,
+    columnWidths: number[],
+    decoratorFunc: (s: string) => string
+) {
+    console.log(` ${file}`.padEnd(columnWidths[0])
+        .concat('|')
+        .concat(columnContents.map((c, i) => {
+            return decoratorFunc(parseFloat(`${c}`).toFixed(2).padStart(columnWidths[i + 1]));
+        }).join('|'))
+        .concat('|')
+        .concat(` ${uncoveredLines}`.padEnd(columnWidths[columnWidths.length - 1]))
+        .concat('|'));
+
+}
+
 export function jestCoverage(bsArgs: Args) {
     exec('npx jest --coverage', (error, stdout, stderr) => {
 
@@ -16,8 +42,6 @@ export function jestCoverage(bsArgs: Args) {
         console.error(stderr);
 
         const coverageTable = parseCoverageOutput(stdout);
-        // console.log('coverage output:', coverageTable);
-        // console.log('argments:', bsArgs);
         if (bsArgs.baseline) {
             fs.writeFileSync('campsite.baseline', JSON.stringify(coverageTable, null, '\t'));
         } else {
@@ -26,11 +50,40 @@ export function jestCoverage(bsArgs: Args) {
 
                 const diffTable = compareBaseline(JSON.parse(baselineBuffer), coverageTable);
 
-                console.log('Comparing line coverage % against baseline');
-                console.log('All files: ', colorizeDiff(diffTable.allFiles.linePercent));
+                console.log('Baseline comparison');
+
+                printBorder(coverageTable.columnWidths);
+                printLine(['File', '% Stmts', '% Branch', '% Funcs', '% Lines', 'Uncovered Line #s'], coverageTable.columnWidths);
+                printBorder(coverageTable.columnWidths);
+                printDataLine(
+                    'All files',
+                    [
+                        diffTable.allFiles.statementPercent,
+                        diffTable.allFiles.branchPercent,
+                        diffTable.allFiles.functionPercent,
+                        diffTable.allFiles.linePercent
+                    ],
+                    diffTable.allFiles.uncoveredLineNumbers,
+                    coverageTable.columnWidths,
+                    colorizeDiff
+                );
+
                 diffTable.items.forEach(diff => {
-                    console.log(` ${diff.file}: ${colorizeDiff(diff.linePercent)} ${uncoveredLines(diff)}`);
+                    printDataLine(
+                        diff.file,
+                        [
+                            diff.statementPercent,
+                            diff.branchPercent,
+                            diff.functionPercent,
+                            diff.linePercent
+                        ],
+                        diff.uncoveredLineNumbers,
+                        coverageTable.columnWidths,
+                        colorizeDiff
+                    );
                 });
+
+                printBorder(coverageTable.columnWidths);
             }
         }
     });
@@ -53,25 +106,18 @@ export interface CoverageItem {
 }
 
 export interface CoverageTable {
+    columnWidths: number[];
     allFiles: CoverageItem;
     items: CoverageItem[]
 }
 
-function colorizeDiff(diff: number) {
-    const roundedDiff = parseFloat(diff.toFixed(2));
+function colorizeDiff(diff: string) {
+    const roundedDiff = Number.parseFloat(diff.trim());
     if (roundedDiff > 0) {
-        return bold(green(`+${roundedDiff}%`));
+        return bold(green(`+${roundedDiff}% `.padStart(diff.length)));
     } else if (roundedDiff < 0) {
-        return bold(red(`${roundedDiff}%`));
+        return bold(red(`${roundedDiff}% `.padStart(diff.length)));
     } else {
-        return `${roundedDiff}%`;
-    }
-}
-
-function uncoveredLines(diff: CoverageItem) {
-    if (diff.linePercent < 0) {
-        return `   ${red('... Uncovered lines: ')}${bold(red(diff.uncoveredLineNumbers))}`;
-    } else {
-        return '';
+        return `${roundedDiff}% `.padStart(diff.length);
     }
 }

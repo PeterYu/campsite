@@ -9,6 +9,7 @@ export function diffBaseline(baseline: CoverageTable|undefined, newStats: Covera
         const newStatsItems = newStats && newStats.items ? newStats.items : [];
         const baselineItems = baseline && baseline.items ? baseline.items : [];
         return {
+            columnWidths: newStats.columnWidths,
             allFiles: {
                 file: newStatsAllFiles.file,
                 ...diff(baselineAllFiles, newStatsAllFiles),

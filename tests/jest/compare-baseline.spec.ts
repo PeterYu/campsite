@@ -24,6 +24,7 @@ describe('Compare Against Baseline', () => {
 
     test('no baseline to compare against', () => {
         const newStats = {
+            columnWidths: [],
             allFiles: {
                 file: 'All files',
                 ...percentages3,
@@ -48,6 +49,7 @@ describe('Compare Against Baseline', () => {
     
     test('baseline exists compare stats', () => {
         const baselineStats = {
+            columnWidths: [],
             allFiles: {
                 file: 'All files',
                 ...percentages1,
@@ -65,6 +67,7 @@ describe('Compare Against Baseline', () => {
 
         };
         const newStats = {
+            columnWidths: [],
             allFiles: {
                 file: 'All files',
                 ...percentages2,
@@ -84,6 +87,7 @@ describe('Compare Against Baseline', () => {
         const diff = diffBaseline(baselineStats, newStats);
 
         expect(diff).toEqual({
+            columnWidths: [],
             allFiles: {
                 file: newStats.allFiles.file,
                 ...percentages1,
@@ -103,6 +107,7 @@ describe('Compare Against Baseline', () => {
 
     test('files only in baseline (delete file)', () => {
         const baselineStats = {
+            columnWidths: [],
             allFiles: {
                 file: 'All files',
                 ...percentages1,
@@ -126,7 +131,9 @@ describe('Compare Against Baseline', () => {
         };
 
         const newStats = {
+            columnWidths: [],
             allFiles: {
+                columnWidths: [],
                 file: 'All files',
                 ...percentages2,
                 uncoveredLineNumbers: '',
@@ -145,6 +152,7 @@ describe('Compare Against Baseline', () => {
         const diff = diffBaseline(baselineStats, newStats);
 
         expect(diff).toEqual({
+            columnWidths: [],
             allFiles: {
                 file: newStats.allFiles.file,
                 ...percentages1,
@@ -165,6 +173,7 @@ describe('Compare Against Baseline', () => {
 
     test('files only in new stats (new file)', () => {
         const baselineStats = {
+            columnWidths: [],
             allFiles: {
                 file: 'All files',
                 ...percentages1,
@@ -182,6 +191,7 @@ describe('Compare Against Baseline', () => {
         };
 
         const newStats = {
+            columnWidths: [],
             allFiles: {
                 file: 'All files',
                 ...percentages2,
@@ -207,6 +217,7 @@ describe('Compare Against Baseline', () => {
         const diff = diffBaseline(baselineStats, newStats);
 
         expect(diff).toEqual({
+            columnWidths: [],
             allFiles: {
                 file: newStats.allFiles.file,
                 ...percentages1,
