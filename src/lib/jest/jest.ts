@@ -55,6 +55,7 @@ export function jestCoverage(bsArgs: Args) {
     const stdout: string[] = [];
 
     jestProc.on('error', error => console.error(error));
+    jestProc.stderr.on('data', data => console.error(`${data}`));
     jestProc.stdout.on('data', data => {
         const stdData = `${data}`;
         console.log(stdData);
