@@ -1,4 +1,5 @@
 import {diffBaseline, Percentages} from '../../src/lib/jest/diff-baseline';
+import {FileStatus} from '../../src/lib/jest/jest';
 
 describe('Compare Against Baseline', () => {
     const percentages1: Percentages = {
@@ -36,7 +37,8 @@ describe('Compare Against Baseline', () => {
                     file: 'git.ts',
                     ...percentages3,
                     uncoveredLineNumbers: '23-43',
-                    path: 'git.ts'
+                    path: 'git.ts',
+                    fileStatus: FileStatus.REMAINS
                 }
             ]
 
@@ -99,7 +101,8 @@ describe('Compare Against Baseline', () => {
                     file: newStats.items[0].file,
                     ...percentages2,
                     uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers,
-                    path: newStats.items[0].path
+                    path: newStats.items[0].path,
+                    fileStatus: FileStatus.REMAINS
                 }
             ]
         });
@@ -161,10 +164,18 @@ describe('Compare Against Baseline', () => {
             },
             items: [
                 {
+                    file: 'jest.ts',
+                    ...percentages2,
+                    uncoveredLineNumbers: '12-3',
+                    path: 'jest.ts',
+                    fileStatus: FileStatus.DELETED
+                },
+                {
                     file: 'git.ts',
                     ...percentages2,
                     uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers,
-                    path: 'git.ts'
+                    path: 'git.ts',
+                    fileStatus: FileStatus.REMAINS
                 }
             ]
         });
@@ -226,11 +237,19 @@ describe('Compare Against Baseline', () => {
             },
             items: [
                 {
+                    file: 'jest.ts',
+                    ...percentages2,
+                    uncoveredLineNumbers: '12-3',
+                    path: 'jest.ts',
+                    fileStatus: FileStatus.ADDED
+                },
+                {
                     file: 'git.ts',
                     ...percentages2,
                     uncoveredLineNumbers: newStats.items[0].uncoveredLineNumbers,
-                    path: 'git.ts'
-                }
+                    path: 'git.ts',
+                    fileStatus: FileStatus.REMAINS
+                },
             ]
         });
 

@@ -22,12 +22,26 @@ function printDataLine(
     columnContents: number[],
     uncoveredLines: string,
     columnWidths: number[],
+    fileStatus: FileStatus,
     decoratorFunc: (s: string) => string
 ) {
-    console.log(` ${file}`.padEnd(columnWidths[0])
+    let fileStatusIndicator;
+    switch (fileStatus) {
+        case FileStatus.ADDED:
+            fileStatusIndicator = '+';
+            break;
+        case FileStatus.DELETED:
+            fileStatusIndicator = '-';
+            break;
+        default:
+            fileStatusIndicator = ' ';
+    }
+    console.log(`${fileStatusIndicator}${file}`.padEnd(columnWidths[0])
         .concat('|')
         .concat(columnContents.map((c, i) => {
-            return decoratorFunc(parseFloat(`${c}`).toFixed(2).padStart(columnWidths[i + 1]));
+            return fileStatus === FileStatus.REMAINS ?
+                decoratorFunc(parseFloat(`${c}`).toFixed(2).padStart(columnWidths[i + 1])) :
+                parseFloat(`${c}`).toFixed(2).padStart(columnWidths[i + 1]);
         }).join('|'))
         .concat('|')
         .concat(` ${uncoveredLines}`.padEnd(columnWidths[columnWidths.length - 1]))
@@ -42,11 +56,10 @@ export function jestCoverage(bsArgs: Args) {
 
     jestProc.on('error', error => console.error(error));
     jestProc.stdout.on('data', data => {
-        console.log(`${data}`);
         stdout.push(`${data}`);
     });
     jestProc.on('exit', () => {
-        const coverageTable = parseCoverageOutput(stdout.join());
+        const coverageTable = parseCoverageOutput(stdout.join(''));
         if (bsArgs.baseline) {
             fs.writeFileSync('campsite.baseline', JSON.stringify(coverageTable, null, '\t'));
         } else {
@@ -70,6 +83,7 @@ export function jestCoverage(bsArgs: Args) {
                     ],
                     diffTable.allFiles.uncoveredLineNumbers,
                     coverageTable.columnWidths,
+                    FileStatus.REMAINS,
                     colorizeDiff
                 );
 
@@ -84,6 +98,7 @@ export function jestCoverage(bsArgs: Args) {
                         ],
                         diff.uncoveredLineNumbers,
                         coverageTable.columnWidths,
+                        diff.fileStatus,
                         colorizeDiff
                     );
                 });
@@ -100,6 +115,11 @@ export class CoverageLine extends Line {
     }
 }
 
+export enum FileStatus {
+    ADDED = 'ADDED',
+    DELETED = 'DELETED',
+    REMAINS = 'REMAINS'
+}
 export interface CoverageItem {
     file: string;
     statementPercent: number;
@@ -110,10 +130,20 @@ export interface CoverageItem {
     path: string;
 }
 
+export interface DiffItem extends CoverageItem {
+    fileStatus: FileStatus;
+}
+
 export interface CoverageTable {
     columnWidths: number[];
     allFiles: CoverageItem;
     items: CoverageItem[]
+}
+
+export interface DiffTable {
+    columnWidths: number[];
+    allFiles: CoverageItem;
+    items: DiffItem[];
 }
 
 function colorizeDiff(diff: string) {

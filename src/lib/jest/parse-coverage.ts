@@ -8,11 +8,11 @@ import {calculateColumnWidths} from './calculate-column-widths';
 export function parseCoverageOutput(rawOutput: string): CoverageTable {
     const lines = parseLines(rawOutput);
 
-    let parsedLines: Line[] = parseCoverageLine(lines);
+    const parsedLines: Line[] = parseCoverageLine(lines);
 
-    let coverageLines: CoverageLine[] = toCoverageLines(parsedLines);
+    const coverageLines: CoverageLine[] = toCoverageLines(parsedLines);
 
-    let coverageItems: CoverageItem[] = convertCoverageLinesToCoverageItems(coverageLines);
+    const coverageItems: CoverageItem[] = convertCoverageLinesToCoverageItems(coverageLines);
 
     return {
         columnWidths: calculateColumnWidths(lines[0]),
