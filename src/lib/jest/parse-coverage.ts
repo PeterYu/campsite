@@ -14,9 +14,12 @@ export function parseCoverageOutput(rawOutput: string): CoverageTable {
 
     const coverageItems: CoverageItem[] = convertCoverageLinesToCoverageItems(coverageLines);
 
+    const [borderLine] = lines;
+    const [allFilesCoverage] = coverageItems;
+
     return {
-        columnWidths: calculateColumnWidths(lines[0]),
-        allFiles: coverageItems[0],
+        columnWidths: calculateColumnWidths(borderLine),
+        allFiles: allFilesCoverage,
         items: coverageItems.splice(1)
     };
 }

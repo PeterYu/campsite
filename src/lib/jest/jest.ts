@@ -2,8 +2,8 @@ import {spawn} from 'child_process';
 import {Line} from './parse-lines';
 import * as fs from 'fs';
 import {bold, green, red} from 'colors/safe';
-import {compareBaseline} from './compare-baseline';
 import {parseCoverageOutput} from './parse-coverage';
+import {diffBaseline} from './diff-baseline';
 
 export interface Args {
     baseline?: boolean;
@@ -36,15 +36,19 @@ function printDataLine(
         default:
             fileStatusIndicator = ' ';
     }
-    console.log(`${fileStatusIndicator}${file}`.padEnd(columnWidths[0])
+
+    const [colWidthFiles, ...colWidthRest] = columnWidths;
+    const [colWidthUncoveredLines] = columnWidths.reverse();
+
+    console.log(`${fileStatusIndicator}${file}`.padEnd(colWidthFiles)
         .concat('|')
         .concat(columnContents.map((c, i) => {
             return fileStatus === FileStatus.REMAINS ?
-                decoratorFunc(parseFloat(`${c}`).toFixed(2).padStart(columnWidths[i + 1])) :
-                parseFloat(`${c}`).toFixed(2).padStart(columnWidths[i + 1]);
+                decoratorFunc(parseFloat(`${c}`).toFixed(2).padStart(colWidthRest[i])) :
+                parseFloat(`${c}`).toFixed(2).padStart(colWidthRest[i]);
         }).join('|'))
         .concat('|')
-        .concat(` ${uncoveredLines}`.padEnd(columnWidths[columnWidths.length - 1]))
+        .concat(` ${uncoveredLines}`.padEnd(colWidthUncoveredLines))
         .concat('|'));
 
 }
@@ -69,7 +73,7 @@ export function jestCoverage(bsArgs: Args) {
             if (fs.existsSync('campsite.baseline')) {
                 const baselineBuffer = fs.readFileSync('campsite.baseline', {encoding: 'utf8'});
 
-                const diffTable = compareBaseline(JSON.parse(baselineBuffer), coverageTable);
+                const diffTable = diffBaseline(JSON.parse(baselineBuffer), coverageTable);
 
                 console.log('Baseline comparison');
 

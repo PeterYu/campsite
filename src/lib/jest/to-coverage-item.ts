@@ -12,7 +12,7 @@ function isValidCoverageLine(cl: CoverageLine) {
 
 function toCoverageItem(line: CoverageLine): CoverageItem {
     let columns = line.line.split('|');
-
+    
     return {
         file: columns[0].trimRight(),
         statementPercent: Number.parseFloat(columns[1].trim()),

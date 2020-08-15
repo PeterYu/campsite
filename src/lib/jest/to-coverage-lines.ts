@@ -2,7 +2,8 @@ import {Line} from './parse-lines';
 import {CoverageLine} from './jest';
 
 function getFile(l: Line) {
-    return l.line.split('|')[0].trim();
+    const [file] = l.line.split('|');
+    return file.trim();
 }
 
 export function toCoverageLines(lines: Line[]): CoverageLine[] {

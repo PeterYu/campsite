@@ -1,7 +1,7 @@
 import {diffBaseline, Percentages} from '../../src/lib/jest/diff-baseline';
 import {FileStatus} from '../../src/lib/jest/jest';
 
-describe('Compare Against Baseline', () => {
+describe('Diff Against Baseline', () => {
     const percentages1: Percentages = {
         branchPercent: 1,
         functionPercent: 1,
