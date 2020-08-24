@@ -37,8 +37,9 @@ function printDataLine(
             fileStatusIndicator = ' ';
     }
 
-    const [colWidthFiles, ...colWidthRest] = columnWidths;
-    const [colWidthUncoveredLines] = columnWidths.reverse();
+    const colWidths = [...columnWidths];
+    const [colWidthFiles, ...colWidthRest] = colWidths;
+    const [colWidthUncoveredLines] = colWidths.reverse();
 
     console.log(`${fileStatusIndicator}${file}`.padEnd(colWidthFiles)
         .concat('|')
@@ -51,6 +52,24 @@ function printDataLine(
         .concat(` ${uncoveredLines}`.padEnd(colWidthUncoveredLines))
         .concat('|'));
 
+}
+
+function printItems(columnWidths: number[], diffItems: DiffItem[]) {
+    diffItems.forEach(diff => {
+        printDataLine(
+            diff.file,
+            [
+                diff.statementPercent,
+                diff.branchPercent,
+                diff.functionPercent,
+                diff.linePercent
+            ],
+            diff.uncoveredLineNumbers,
+            [...columnWidths],
+            diff.fileStatus,
+            colorizeDiff
+        );
+    });
 }
 
 export function jestCoverage(bsArgs: Args) {
@@ -76,10 +95,24 @@ export function jestCoverage(bsArgs: Args) {
                 const diffTable = diffBaseline(JSON.parse(baselineBuffer), coverageTable);
 
                 console.log('Baseline comparison');
-
                 printBorder(coverageTable.columnWidths);
                 printLine(['File', '% Stmts', '% Branch', '% Funcs', '% Lines', 'Uncovered Line #s'], coverageTable.columnWidths);
                 printBorder(coverageTable.columnWidths);
+
+                const addedItems = diffTable.items.filter(i => i.fileStatus === FileStatus.ADDED);
+                if (addedItems.length > 0) {
+                    console.log('Added Files');
+                    printItems(coverageTable.columnWidths, addedItems);
+                    printBorder(coverageTable.columnWidths);
+                }
+
+                const deletedItems = diffTable.items.filter(i => i.fileStatus === FileStatus.DELETED);
+                if (deletedItems.length > 0) {
+                    console.log('Deleted Files');
+                    printItems(coverageTable.columnWidths, deletedItems);
+                    printBorder(coverageTable.columnWidths);
+                }
+
                 printDataLine(
                     'All files',
                     [
@@ -94,21 +127,10 @@ export function jestCoverage(bsArgs: Args) {
                     colorizeDiff
                 );
 
-                diffTable.items.forEach(diff => {
-                    printDataLine(
-                        diff.file,
-                        [
-                            diff.statementPercent,
-                            diff.branchPercent,
-                            diff.functionPercent,
-                            diff.linePercent
-                        ],
-                        diff.uncoveredLineNumbers,
-                        coverageTable.columnWidths,
-                        diff.fileStatus,
-                        colorizeDiff
-                    );
-                });
+                const remainsItems = diffTable.items.filter(i => i.fileStatus === FileStatus.REMAINS);
+                if (remainsItems.length > 0) {
+                    printItems(coverageTable.columnWidths, remainsItems);
+                }
 
                 printBorder(coverageTable.columnWidths);
             }
