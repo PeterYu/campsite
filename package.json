@@ -1,6 +1,6 @@
 {
   "name": "@nexxspace/campsite",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Script to help improve test coverage",
   "main": "index",
   "bin": {
