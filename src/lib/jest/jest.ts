@@ -1,9 +1,11 @@
 import {spawn} from 'child_process';
+import process from 'process';
 import {Line} from './parse-lines';
 import * as fs from 'fs';
 import {bold, green, red} from 'colors/safe';
 import {parseCoverageOutput} from './parse-coverage';
 import {diffBaseline} from './diff-baseline';
+import {yellow} from 'colors';
 
 export interface Args {
     baseline?: boolean;
@@ -75,13 +77,13 @@ function printItems(columnWidths: number[], diffItems: DiffItem[]) {
 export function jestCoverage(bsArgs: Args) {
     const jestProc = spawn('npx', ['jest', '--coverage']);
 
+    jestProc.stdout.pipe(process.stdout);
+    jestProc.stderr.pipe(process.stderr);
     const stdout: string[] = [];
 
     jestProc.on('error', error => console.error(error));
-    jestProc.stderr.on('data', data => console.error(`${data}`));
     jestProc.stdout.on('data', data => {
         const stdData = `${data}`;
-        console.log(stdData);
         stdout.push(stdData);
     });
     jestProc.on('exit', () => {
@@ -94,7 +96,8 @@ export function jestCoverage(bsArgs: Args) {
 
                 const diffTable = diffBaseline(JSON.parse(baselineBuffer), coverageTable);
 
-                console.log('Baseline comparison');
+                console.log();
+                console.log(bold(yellow('Baseline Comparison')));
                 printBorder(coverageTable.columnWidths);
                 printLine(['File', '% Stmts', '% Branch', '% Funcs', '% Lines', 'Uncovered Line #s'], coverageTable.columnWidths);
                 printBorder(coverageTable.columnWidths);
