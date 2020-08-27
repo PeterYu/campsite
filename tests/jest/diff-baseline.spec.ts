@@ -2,6 +2,13 @@ import {diffBaseline, Percentages} from '../../src/lib/jest/diff-baseline';
 import {FileStatus} from '../../src/lib/jest/jest';
 
 describe('Diff Against Baseline', () => {
+    const percentages0: Percentages = {
+        branchPercent: 0,
+        functionPercent: 0,
+        linePercent: 0,
+        statementPercent: 0
+    };
+
     const percentages1: Percentages = {
         branchPercent: 1,
         functionPercent: 1,
@@ -251,6 +258,42 @@ describe('Diff Against Baseline', () => {
                     fileStatus: FileStatus.REMAINS
                 },
             ]
+        });
+
+    });
+
+    test('excludes unchanged stats', () => {
+        const baselineStats = {
+            columnWidths: [],
+            allFiles: {
+                file: 'All files',
+                ...percentages1,
+                uncoveredLineNumbers: '',
+                path: ''
+            },
+            items: [
+                {
+                    file: 'git.ts',
+                    ...percentages1,
+                    uncoveredLineNumbers: '12-3',
+                    path: 'git.ts'
+                }
+            ]
+        };
+
+        const newStats = {...baselineStats};
+
+        const diff = diffBaseline(baselineStats, newStats);
+
+        expect(diff).toEqual({
+            columnWidths: [],
+            allFiles: {
+                file: newStats.allFiles.file,
+                ...percentages0,
+                uncoveredLineNumbers: newStats.allFiles.uncoveredLineNumbers,
+                path: ''
+            },
+            items: []
         });
 
     });

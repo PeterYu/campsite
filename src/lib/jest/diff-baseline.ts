@@ -48,6 +48,12 @@ export function diffBaseline(baseline: CoverageTable|undefined, newStats: Covera
                             };
                         })
                     )
+                    .filter(item => {
+                        return item.statementPercent !== 0 ||
+                            item.branchPercent !== 0 ||
+                            item.functionPercent !== 0 ||
+                            item.linePercent !== 0
+                    })
         }
     }
 }
