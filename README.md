@@ -23,14 +23,14 @@ Then you might ask question, *__How do I know when I am editing the code if I ha
 
 __Campsite__ provides you the ability to compare unit test coverage against a baseline (*"code when you found it"*) and shows you exactly that.
 
-# Installation
+## Installation
 Lets install `campsite` globally.
 
 ```
 npm install @nexxspace/campsite jest
 ```
 
-# How it works
+## How it works
 
 1. Before you begin making your change in the code. Lets save a baseline of the current code.
 
