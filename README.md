@@ -1,4 +1,5 @@
 # Campsite
+Campsite is a `jest` runner that helps you focus on improving test coverage.
 
 ## The Pitch
 Have you ever heard of a Boy Scout Rule that says
